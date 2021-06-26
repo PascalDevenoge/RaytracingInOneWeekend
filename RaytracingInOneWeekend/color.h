@@ -2,14 +2,14 @@
 
 #include <iostream>
 
-#include "vec.h"
+#include "vec3.h"
 
 int* convertToRGB(color color) {
     int rgb[3];
     rgb[0] = static_cast<int>(255.999 * color.x());
     rgb[1] = static_cast<int>(255.999 * color.y());
     rgb[2] = static_cast<int>(255.999 * color.z());
-    return rgb;
+           return rgb;
 }
 
 void writeColor(std::ostream& out, color color) {

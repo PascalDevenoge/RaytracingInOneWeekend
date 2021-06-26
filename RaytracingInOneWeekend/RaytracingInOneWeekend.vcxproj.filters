@@ -29,10 +29,28 @@
     <ClInclude Include="stb_image_write.h">
       <Filter>Headerdateien\lib</Filter>
     </ClInclude>
-    <ClInclude Include="vec.h">
+    <ClInclude Include="vec3.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="color.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ray.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="hittable.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="sphere.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="hittableList.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
