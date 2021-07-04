@@ -13,9 +13,9 @@ struct rgbColor {
 
 rgbColor convertToRGB(color color) {
     rgbColor rgb;
-    rgb.r = static_cast<int>(255.999 * color.x());
-    rgb.g = static_cast<int>(255.999 * color.y());
-    rgb.b = static_cast<int>(255.999 * color.z());
+    rgb.r = static_cast<int>(256 * clamp(sqrt(color.x()), 0.0, 0.999));
+    rgb.g = static_cast<int>(256 * clamp(sqrt(color.y()), 0.0, 0.999));
+    rgb.b = static_cast<int>(256 * clamp(sqrt(color.z()), 0.0, 0.999));
     return rgb;
 }
 

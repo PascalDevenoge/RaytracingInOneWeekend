@@ -5,12 +5,30 @@
 
 class randomSupersamplingCamera : abstractCamera {
 public:
-	randomSupersamplingCamera(double viewportHeight, double viewportWidth, double focalLength, int numOfPixelsVert, int numOfPixelsHor, int samplesPerPixel) : samplesPerPixel(samplesPerPixel) {
-		cameraPosition = vec3(0, 0, 0);
-		horizontalSpan = vec3(viewportWidth, 0, 0);
-		verticalSpan = vec3(0, viewportHeight, 0);
-		focalVec = vec3(0, 0, -focalLength);
-		upperLeftCorner = cameraPosition + focalVec + (verticalSpan / 2) - (horizontalSpan / 2);
+	randomSupersamplingCamera(
+		point3 position,
+		point3 lookAt,
+		vec3 up,
+		double fov,
+		double aspectRatio,
+		int numOfPixelsVert,
+		int numOfPixelsHor,
+		int samplesPerPixel
+	) : samplesPerPixel(samplesPerPixel) {
+		auto theta = degreesToRadians(fov);
+		auto h = tan(theta / 2);
+		auto viewportHeight = 2.0 * h;
+		auto viewportWidth = aspectRatio * viewportHeight;
+		auto focalLength = 1.0;
+
+		auto w = vec3::normalize(position - lookAt);
+		auto u = vec3::normalize(cross(up, w));
+		auto v = cross(w, u);
+
+		cameraPosition = position;
+		horizontalSpan = viewportWidth * u;
+		verticalSpan = viewportHeight * v;
+		upperLeftCorner = cameraPosition + (verticalSpan / 2) - (horizontalSpan / 2) - w;
 		verticalPixelSize = viewportHeight / numOfPixelsVert;
 		horizontalPixelSize = viewportWidth / numOfPixelsHor;
 	}

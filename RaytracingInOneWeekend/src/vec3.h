@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "utilities.h"
+
 using std::sqrt;
 
 class vec3 {
@@ -61,6 +63,21 @@ public:
 		comp[2] /= length;
 		return *this;
 	}
+
+	bool nearZero() const {
+		const auto s = 1e-8;
+		return (fabs(comp[0]) < s && (fabs(comp[1]) < s) && fabs(comp[2]) < s);
+	}
+
+	static vec3 normalize(const vec3& v);
+	static vec3 random();
+	static vec3 random(double min, double max);
+	static vec3 randomInUnitSphere();
+	static vec3 randomUnitVector();
+	static vec3 randomInHemisphere(const vec3& normal);
+	static vec3 randomInUnitDisk();
+	static vec3 reflect(const vec3& v, const vec3& normal);
+	static vec3 refract(const vec3& uv, const vec3& normal, double etaIOverEtaT);
 };
 
 using point3 = vec3;
@@ -110,6 +127,50 @@ inline vec3 cross(const vec3& u, const vec3& v) {
 				u.comp[0] * v.comp[1] - u.comp[1] * v.comp[0]);
 }
 
-inline vec3 normalize(const vec3 v) {
+inline vec3 vec3::normalize(const vec3& v) {
 	return v / v.length();
+}
+
+inline vec3 vec3::random() {
+	return vec3(randomDouble(), randomDouble(), randomDouble());
+}
+
+inline vec3 vec3::random(double min, double max) {
+	return vec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
+}
+
+inline vec3 vec3::randomInUnitSphere() {
+	vec3 vector;
+	do {
+		vector = vec3::random(-1, 1);
+	} while (vector.lengthSquared() >= 1);
+	return vector;
+}
+
+inline vec3 vec3::randomUnitVector() {
+	return vec3::normalize(randomInUnitSphere());
+}
+
+inline vec3 vec3::randomInHemisphere(const vec3& normal) {
+	vec3 inUnitSphere = randomInUnitSphere();
+	return (dot(inUnitSphere, normal) > 0.0) ? inUnitSphere : -inUnitSphere;
+}
+
+inline vec3 vec3::randomInUnitDisk() {
+	vec3 p;
+	do {
+		p = vec3(randomDouble(-1, 1), randomDouble(-1, 1), 0);
+	} while (p.lengthSquared() >= 1);
+	return p;
+}
+
+inline vec3 vec3::reflect(const vec3& v, const vec3& normal) {
+	return v - 2 * dot(v, normal) * normal;
+}
+
+inline vec3 vec3::refract(const vec3& uv, const vec3& normal, double etaIOverEtaT) {
+	auto cosTheta = fmin(dot(-uv, normal), 1.0);
+	vec3 rOutPrep = etaIOverEtaT * (uv + cosTheta * normal);
+	vec3 rOutParallel = -sqrt(fabs(1.0 - rOutPrep.lengthSquared())) * normal;
+	return rOutPrep + rOutParallel;
 }

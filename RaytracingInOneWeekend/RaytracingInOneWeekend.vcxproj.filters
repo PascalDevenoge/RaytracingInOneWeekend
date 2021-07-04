@@ -59,5 +59,20 @@
     <ClInclude Include="src\camera\randomSupersamplingCamera.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="src\material\abstractMaterial.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\material\lambertian.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\material\metal.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\material\dielectric.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\depthOfFieldCamera.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -145,10 +145,15 @@
   <ItemGroup>
     <ClInclude Include="src\camera\abstractCamera.h" />
     <ClInclude Include="src\camera\basicCamera.h" />
+    <ClInclude Include="src\camera\depthOfFieldCamera.h" />
     <ClInclude Include="src\camera\randomSupersamplingCamera.h" />
     <ClInclude Include="src\color.h" />
     <ClInclude Include="src\hittable.h" />
     <ClInclude Include="src\hittableList.h" />
+    <ClInclude Include="src\material\abstractMaterial.h" />
+    <ClInclude Include="src\material\dielectric.h" />
+    <ClInclude Include="src\material\lambertian.h" />
+    <ClInclude Include="src\material\metal.h" />
     <ClInclude Include="src\ray.h" />
     <ClInclude Include="src\sphere.h" />
     <ClInclude Include="libs\stb_image.h" />
