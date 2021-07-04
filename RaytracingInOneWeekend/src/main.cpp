@@ -2,12 +2,13 @@
 #include <string>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "../libs/stb_image_write.h"
 
 #include "hittableList.h"
 #include "color.h"
 #include "sphere.h"
-#include "camera.h"
+#include "camera/basicCamera.h"
+#include "camera/randomSupersamplingCamera.h"
 #include "utilities.h"
 
 color rayColor(const ray& r, const hittableList& world);
@@ -16,35 +17,40 @@ void writeImageBufferToFile(const uint8_t* imageData, const int imageWidth, cons
 
 int main() {
 
+	// Image parameters
 	const auto aspectRatio = 16.0 / 9.0;
-	const int imageWidth = 400;
+	const int imageWidth = 200;
 	const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
-	const int samplePerPixel = 100;
+	const double focalLength = 1.0;
 
+	// Scene description
 	hittableList world;
 	world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
 	world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
 
-	camera camera;
+	// Camera setup
+	// basicCamera camera(2.0, 2.0 * aspectRatio, focalLength);
+	randomSupersamplingCamera camera(2.0, 2.0 * aspectRatio, focalLength, imageHeight, imageWidth, 100);
 
+	// Pixel buffer
 	uint8_t* image_data = new uint8_t[imageWidth * imageHeight * 3];
 
-	for (int i = imageHeight; i >= imageHeight; i++) {
-		std::cout << "\nRows left: " << i << ' ' << std::flush;
-		for (int j = 0; j < imageWidth; j++) {
-			color pixelColor(0, 0, 0);
-			for (int s = 0; s < samplePerPixel; s++) {
-				auto u = (j + randomDouble()) / (imageWidth - 1);
-				auto v = (i + randomDouble()) / (imageHeight - 1);
-				ray r = camera.getRay(u, v);
-				pixelColor += rayColor(r, world);
-			}
+	// Render loop
+	for (int row = 0; row < imageHeight; row++) {
+		std::cout << "\nRows left: " << imageHeight - row << ' ' << std::flush;
 
-			pixelColor /= samplePerPixel;
-			writeColorToBuffer(pixelColor, i * imageWidth + j, image_data);
+		for (int collumn = 0; collumn < imageWidth; collumn++) {
+			color pixelColor(0, 0, 0);
+			std::vector<ray> sampleRays = camera.getRaysForPixel((double) collumn / imageWidth, (double) row / imageHeight);
+			for (const auto& sample : sampleRays) {
+				pixelColor += rayColor(sample, world);
+			}
+			pixelColor /= static_cast<double>(sampleRays.size());
+			writeColorToBuffer(pixelColor, row * imageWidth + collumn, image_data);
 		}
 	}
 
+	// Write out buffer
 	writeImageBufferToFile(image_data, imageWidth, imageHeight);
 	delete[] image_data;
 	std::cout << "\nFinished";
@@ -61,11 +67,11 @@ color rayColor(const ray& r, const hittableList& world) {
 }
 
 void writeColorToBuffer(const color color, int pixelNum, uint8_t* buffer) {
-	int* rgb = convertToRGB(color);
+	rgbColor rgb = convertToRGB(color);
 	int pixelPos = pixelNum * 3;
-	buffer[pixelPos] = rgb[0];
-	buffer[pixelPos + 1] = rgb[1];
-	buffer[pixelPos + 2] = rgb[2];
+	buffer[pixelPos] = rgb.r;
+	buffer[pixelPos + 1] = rgb.g;
+	buffer[pixelPos + 2] = rgb.b;
 }
 
 void writeImageBufferToFile(const uint8_t *imageData, const int imageWidth, const int imageHeight) {

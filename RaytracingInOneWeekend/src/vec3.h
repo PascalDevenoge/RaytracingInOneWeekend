@@ -54,6 +54,13 @@ public:
 		return comp[0] * comp[0] + comp[1] * comp[1] + comp[2] * comp[2];
 	}
 
+	vec3& normalize() {
+		double length = this->length();
+		comp[0] /= length;
+		comp[1] /= length;
+		comp[2] /= length;
+		return *this;
+	}
 };
 
 using point3 = vec3;

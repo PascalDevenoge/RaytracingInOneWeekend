@@ -140,19 +140,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="color.h" />
-    <ClInclude Include="hittable.h" />
-    <ClInclude Include="hittableList.h" />
-    <ClInclude Include="ray.h" />
-    <ClInclude Include="sphere.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="stb_image_write.h" />
-    <ClInclude Include="utilities.h" />
-    <ClInclude Include="vec3.h" />
+    <ClInclude Include="src\camera\abstractCamera.h" />
+    <ClInclude Include="src\camera\basicCamera.h" />
+    <ClInclude Include="src\camera\randomSupersamplingCamera.h" />
+    <ClInclude Include="src\color.h" />
+    <ClInclude Include="src\hittable.h" />
+    <ClInclude Include="src\hittableList.h" />
+    <ClInclude Include="src\ray.h" />
+    <ClInclude Include="src\sphere.h" />
+    <ClInclude Include="libs\stb_image.h" />
+    <ClInclude Include="libs\stb_image_write.h" />
+    <ClInclude Include="src\utilities.h" />
+    <ClInclude Include="src\vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
