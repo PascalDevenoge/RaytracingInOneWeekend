@@ -6,9 +6,6 @@
 #include <cstdlib>
 #include <random>
 
-#include "ray.h"
-#include "vec3.h"
-
 using std::shared_ptr;
 using std::make_shared;
 using std::sqrt;
@@ -34,4 +31,8 @@ inline double randomDoubleStd() {
 	static std::uniform_real_distribution<double> distribution(0.0, 1.0);
 	static std::mt19937 generator;
 	return distribution(generator);
+}
+
+inline int randomInt(int min, int max) {
+	return static_cast<int>(randomDouble(min, max + 1));
 }

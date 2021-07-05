@@ -6,28 +6,32 @@
 
 #include "hittableList.h"
 #include "color.h"
-#include "sphere.h"
+#include "primitive/sphere.h"
+#include "primitive/movingSphere.h"
 #include "camera/basicCamera.h"
 #include "camera/randomSupersamplingCamera.h"
 #include "camera/depthOfFieldCamera.h"
+#include "camera/motionBlurDOFCamera.h"
 #include "utilities.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
 #include "material/dielectric.h"
+#include "bvhNode.h"
+#include "texture/checkerTexture.h"
 
-color rayColor(const ray& r, const hittableList& world, int depth);
+color rayColor(const ray& r, const hittable& world, int depth);
 void writeColorToBuffer(color color, int pixelNum, uint8_t* buffer);
 void writeImageBufferToFile(const uint8_t* imageData, const int imageWidth, const int imageHeight);
-hittableList randomScene();
+bvhNode randomScene();
 
 int main() {
 
 	// Image parameters
-	const auto aspectRatio = 3.0 / 2.0;
-	const int imageWidth = 400;
+	const auto aspectRatio = 16.0 / 9.0;
+	const int imageWidth = 1200;
 	const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
 	const double focalLength = 1.0;
-	const int samplePerPixel = 10;
+	const int samplePerPixel = 500;
 	const int maxDepth = 50;
 
 	// Scene description
@@ -40,7 +44,7 @@ int main() {
 	auto dist_to_focus = 10.0;
 	auto aperture = 0.1;
 
-	depthOfFieldCamera camera(position, lookat, vup, 20, aspectRatio, aperture, dist_to_focus, samplePerPixel);
+	motionBlurDOFCamera camera(position, lookat, vup, 20, aspectRatio, aperture, dist_to_focus, samplePerPixel, 0.0, 1.0);
 
 	// Pixel buffer
 	uint8_t* image_data = new uint8_t[imageWidth * imageHeight * 3];
@@ -66,7 +70,7 @@ int main() {
 	std::cout << "\nFinished";
 }
 
-color rayColor(const ray& r, const hittableList& world, int depth) {
+color rayColor(const ray& r, const hittable& world, int depth) {
 	if (depth <= 0) {
 		return color(0, 0, 0);
 	}
@@ -98,10 +102,12 @@ void writeImageBufferToFile(const uint8_t *imageData, const int imageWidth, cons
 	stbi_write_jpg("./imageOut.jpg", imageWidth, imageHeight, 3, imageData, 100);
 }
 
-hittableList randomScene() {
+bvhNode randomScene() {
 	hittableList world;
 
-	auto groundMaterial = make_shared<lambertian>(color(0.5, 0.5, 0.5));
+	auto checker = make_shared<checkerTexture>(color(0.2, 0.3, 0.1), color(0.9, 0.9, 0.9));
+
+	auto groundMaterial = make_shared<lambertian>(checker);
 	world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, groundMaterial));
 
 	for (int a = -11; a < 11; a++) {
@@ -116,7 +122,8 @@ hittableList randomScene() {
 					// Diffuse
 					auto albedo = color::random() * color::random();
 					sphereMaterial = make_shared<lambertian>(albedo);
-					world.add(make_shared<sphere>(center, 0.2, sphereMaterial));
+					auto center2 = center + vec3(0, randomDouble(0, 0.5), 0);
+					world.add(make_shared<movingSphere>(center, center2, 0.0, 1.0, 0.2, sphereMaterial));
 				} else if (chooseMaterial < 0.95) {
 					// Metal
 					auto albedo = color::random(0.5, 1);
@@ -141,5 +148,5 @@ hittableList randomScene() {
 	auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
 	world.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
 
-	return world;
+	return bvhNode(world, 0.0, 1.0);
 }

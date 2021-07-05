@@ -1,7 +1,5 @@
 #pragma once
 
-#include "abstractMaterial.h"
-
 class dielectric : public abstractMaterial {
 public:
 	dielectric(double ior) : ior(ior) {}
@@ -22,7 +20,7 @@ public:
 			direction = vec3::refract(unitDirection, rec.normal, refractionRatio);
 		}
 
-		scattered = ray(rec.p, direction);
+		scattered = ray(rec.p, direction, rIn.time());
 		return true;
 	}
 

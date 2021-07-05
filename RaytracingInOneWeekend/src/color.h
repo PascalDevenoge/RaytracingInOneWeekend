@@ -3,8 +3,6 @@
 #include <iostream>
 #include <vector>
 
-#include "vec3.h"
-
 struct rgbColor {
     uint8_t r;
     uint8_t g;

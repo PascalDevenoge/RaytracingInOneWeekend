@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../utilities.h"
-
 struct hitRecord;
 
 class abstractMaterial {

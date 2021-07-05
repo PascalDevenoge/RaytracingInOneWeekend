@@ -1,7 +1,6 @@
 #pragma once
 
 #include "abstractCamera.h"
-#include "../utilities.h"
 
 class randomSupersamplingCamera : abstractCamera {
 public:
@@ -33,7 +32,7 @@ public:
 		horizontalPixelSize = viewportWidth / numOfPixelsHor;
 	}
 
-	virtual std::vector<ray> getRaysForPixel(double u, double v) override {
+	virtual std::vector<ray> getRaysForPixel(double u, double v) const override {
 		std::vector<ray> rays;
 		for (int i = 0; i < samplesPerPixel; i++) {
 			vec3 centerScreenPosition = upperLeftCorner + u * horizontalSpan - v * verticalSpan;

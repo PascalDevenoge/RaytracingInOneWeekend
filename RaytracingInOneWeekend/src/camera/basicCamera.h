@@ -1,7 +1,6 @@
 #pragma once
 
 #include "abstractCamera.h"
-#include "../utilities.h"
 
 class basicCamera : abstractCamera {
 public:
@@ -27,7 +26,7 @@ public:
 		upperLeftCorner = cameraPosition + (verticalSpan / 2) - (horizontalSpan / 2) - w;
 	}
 
-	virtual std::vector<ray> getRaysForPixel(double u, double v) override {
+	virtual std::vector<ray> getRaysForPixel(double u, double v) const override {
 		std::vector<ray> rays;
 		vec3 screenPosition = upperLeftCorner + u * horizontalSpan - v * verticalSpan;
  		rays.push_back(ray(cameraPosition, screenPosition - cameraPosition));

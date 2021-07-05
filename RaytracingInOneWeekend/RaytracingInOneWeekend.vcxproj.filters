@@ -41,7 +41,7 @@
     <ClInclude Include="src\hittable.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="src\sphere.h">
+    <ClInclude Include="src\primitive\sphere.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\hittableList.h">
@@ -72,6 +72,30 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="src\camera\depthOfFieldCamera.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hitRecord.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\motionBlurDOFCamera.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\primitive\movingSphere.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aabb.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bvhNode.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture\texture.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture\solidColor.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture\checkerTexture.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

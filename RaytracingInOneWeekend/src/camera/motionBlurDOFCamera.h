@@ -2,9 +2,9 @@
 
 #include "abstractCamera.h"
 
-class depthOfFieldCamera : public abstractCamera {
+class motionBlurDOFCamera : public abstractCamera {
 public:
-	depthOfFieldCamera(
+	motionBlurDOFCamera(
 		point3 position,
 		point3 lookAt,
 		vec3 up,
@@ -12,8 +12,10 @@ public:
 		double aspectRatio,
 		double aperture,
 		double focusDistance,
-		int samplesPerPixel
-	) : samplesPerPixel(samplesPerPixel) {
+		int samplesPerPixel,
+		double startTime = 0,
+		double stopTime = 0
+	) : samplesPerPixel(samplesPerPixel), startTime(startTime), stopTime(stopTime) {
 		auto theta = degreesToRadians(fov);
 		auto h = tan(theta / 2);
 		auto viewportHeight = 2.0 * h;
@@ -37,8 +39,11 @@ public:
 			vec3 rd = lensRadius * vec3::randomInUnitDisk();
 			vec3 offset = u * rd.x() + v * rd.y();
 
-			ray sample(cameraPosition + offset, upperLeftCorner + s * horizontalSpan - t * verticalSpan - cameraPosition - offset);
-
+			ray sample(
+				cameraPosition + offset,
+				upperLeftCorner + s * horizontalSpan - t * verticalSpan - cameraPosition - offset,
+				randomDouble(startTime, stopTime)
+			);
 			rays.push_back(sample);
 		}
 		return rays;
@@ -52,4 +57,5 @@ private:
 	vec3 u, v, w;
 	double lensRadius;
 	int samplesPerPixel;
+	double startTime, stopTime;
 };
